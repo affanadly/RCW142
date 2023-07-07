@@ -11,6 +11,8 @@
 
 [AIPS Reduction procedure](reduction_procedure.md)
 
+[Reference AIPS log for AFGL 1542](aips_log.old.txt)
+
 ## Epochs
 
 | Experiment Code | Bucket | Start Date | End Date | Start Time | End Time | Velocity (km/s) |
