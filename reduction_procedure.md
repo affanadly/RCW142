@@ -89,7 +89,7 @@
   go
   ```
 
-* SNEDT (Manually remove anomalous solutions  if necessary)
+* SNEDT (Manually remove anomalous solutions if necessary)
   * Creates SN2 for Cat 1
 
   ```plain
@@ -97,7 +97,7 @@
   getn 1
   inext 'sn'
   inver 1
-  solint 1.6384/60
+  solint 1
   go
   ```
 
