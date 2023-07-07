@@ -30,3 +30,5 @@
 * [K18TH01H](k18th01h.md)
 * [K18TH01M](k18th01m.md)
 * [K18TH01Q](k18th01q.md)
+* [K19TH04B](k19th04b.md)
+* [K19TH04C](k19th04c.md)
