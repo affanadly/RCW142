@@ -9,7 +9,7 @@
 
 ## Data Reduction Procedure
 
-[AIPS Reduction procedure](reduction_procedure.md)
+[AIPS reduction procedure](reduction_procedure.md)
 
 ## Epochs
 
