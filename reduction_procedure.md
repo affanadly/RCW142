@@ -85,7 +85,7 @@
   ```plain
   task 'accor'; default
   getn 1
-  solint 1
+  solint 1.6384/60
   go
   ```
 
@@ -97,7 +97,7 @@
   getn 1
   inext 'sn'
   inver 1
-  solint 1
+  solint 1.6384/60
   go
   ```
 
