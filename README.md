@@ -11,7 +11,7 @@
 
 [AIPS reduction procedure](reduction_procedure.md)
 
-[Ross' AFGL 5142 log](aips_log.old)
+[Ross' AFGL 5142 log](aips_log.old.txt)
 
 ## Epochs
 
