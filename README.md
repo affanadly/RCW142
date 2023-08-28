@@ -6,8 +6,8 @@
 
 * 5 epochs downloaded, all can be loaded to AIPS with no issues.
 * Currently calibrating 1st epoch
-* Amplitude calibration is fine, but phase calibration (dummy+instrumental) doesn't look good. NRAO 530 image seems realistic, but RCW 142 phase looks relatively scattered.
-* Continuing with phase+rate calibration (line) using brightest peak (channel 476) also doesn't give good results i.e. no fringes found when using FRMAP.
+* Amplitude and phase (instrumental delay) calibration is done, NRAO 530 image seems realistic.
+* Continuing with rate calibration using brightest peak (channel 476) doesn't give good results i.e. no fringes found when using FRMAP.
 
 ## Data Reduction Procedure
 
