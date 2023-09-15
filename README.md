@@ -6,14 +6,10 @@
 
 * 5 epochs downloaded, all can be loaded to AIPS with no issues.
 * Currently calibrating 1st epoch
-* Amplitude and phase (instrumental delay) calibration is done, NRAO 530 image seems realistic.
-* Continuing with rate calibration using brightest peak (channel 476) doesn't give good results i.e. no fringes found when using FRMAP.
 
 ## Data Reduction Procedure
 
 [AIPS reduction procedure](reduction_procedure.md)
-
-[Ross' AFGL 5142 log](aips_log.old.txt)
 
 ## Epochs
 
