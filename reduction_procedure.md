@@ -158,3 +158,198 @@
     calsour 'NRAO530''
     go
     ```
+
+## Delay Calibration
+
+* FRING: Generate delay solution from calibrator source, Creates SN4 for Cat 1
+
+    ```plain
+    task 'fring'; default
+    getn 1
+    docal 1
+    gainuse 3
+    doband -1
+    refant 2
+    search 5
+    aparm 2,-1,0,0,0,0,5,0,1
+    dparm 1,200,300,1
+    calsour 'NRAO530''
+    solint 1
+    solsub 0
+    go
+    ```
+
+* CLCAL: Combine previous calibration with solution table, Creates CL4 for Cat 1
+
+    ```plain
+    task 'clcal'; default
+    getn 1
+    calcode ''
+    opcode 'cali'
+    soucode ''
+    smotype 'full'
+    samptype '2pth'
+    dobtween 1
+    bparm(4) 1
+    refant 2
+    calsour 'NRAO530''
+    sources 'NRAO530''
+    snver 4
+    gainver 3
+    gainuse 4
+    go
+    ```
+
+* SPLAT: Split out NRAO530 data into a new catalogue, Creates Catalogue 2
+
+    ```plain
+    task 'splat'; default
+    getn 1
+    docal 1
+    gainuse 4
+    sources 'NRAO530''
+    outname 'NRAO530
+    aparm(1) 1
+    go
+    ```
+
+* IMAGR: Create dirty image and clean image of NRAO530, Creates Catalogues 3 and 4
+
+    ```plain
+    task 'imagr'; default
+    getn 2
+    nchav 0
+    minpatch 128
+    onebeam -1
+    maxpixel 0
+    cellsize 0.0001 0.0001
+    imsize 1024 1024
+    dotv -1
+    niter 500
+    robust 0
+    stokes 'I'
+    docal -1
+    srcname 'NRAO530'
+    go
+    recat
+    ```
+
+* FRING: Generate delay solution from calibrator source, Creates SN5 for Cat 1
+
+    ```plain
+    task 'fring'; default
+    getn 1
+    docal 1
+    gainuse 3
+    doband -1
+    refant 2
+    search 5
+    aparm 2,-1,0,0,0,0,7,0,1
+    dparm 1,300,100,1,0,0,0,1
+    calsour 'NRAO530''
+    solint 10
+    solsub 0
+    go
+    ```
+
+* CLCAL: Combine previous calibration with solution table, Creates CL5 for Cat 1
+
+    ```plain
+    task 'clcal'; default
+    getn 1
+    calcode ''
+    opcode 'cali'
+    soucode ''
+    smotype 'full'
+    samptype '2pth'
+    dobtween 1
+    bparm(4) 1
+    refant 2
+    calsour 'NRAO530''
+    sources ''
+    snver 5
+    gainver 3
+    gainuse 5
+    go
+    ```
+
+## Shift Phase Tracking Center
+
+* CLCOR: Shift phase tracking center to the center of the image by applying correction to CL table, Creates CL6 for Cat 1
+
+    ```plain
+    task 'clcor'; default
+    getn 1
+    opcode 'antc'
+    clcorprm(5)=-0.1155
+    clcorprm(6)=-1.7765
+    sources 'RCW142''
+    gainver 5
+    gainuse 6
+    go
+    ```
+
+## Apply Doppler Correction
+
+* SETJY: Set velocity parameters, Modifies SU1 for Cat 1
+
+    ```plain
+    task 'clcor'; default
+    getn 1
+    opcode 'antc'
+    clcorprm(5)=-0.1155
+    clcorprm(6)=-1.7765
+    sources 'RCW142''
+    gainver 5
+    gainuse 6
+    go
+    ```
+
+* CVEL: Apply Doppler correction to data, Creates Catalogue 5
+
+    ```plain
+    task 'cvel'; default
+    getn 1
+    aparm(10) 1
+    aparm(4) 1
+    freqid 1
+    sources 'RCW142''
+    gainuse 6
+    go
+    ```
+
+## Rate Calibration
+
+* FRING: Generate rate solution from maser source, Creates SN6 for Cat 5
+
+    ```plain
+    task 'fring'; default
+    getn 5
+    aparm 2,0,-1,0,0,0,3,0,1
+    dparm 0,-1,200
+    refant 2
+    calsour 'RCW142''
+    docal 1
+    gainuse 6
+    doband -1
+    bchan 476
+    echan 476
+    solint 0.0625
+    go
+    ```
+
+* CLCAL: Combine previous calibration with solution table, Creates CL7 for Cat 5
+
+    ```plain
+    task 'clcal'; default
+    getn 5
+    opcode 'cali'
+    interpol 'ambg'
+    refant 2
+    calsour 'RCW142''
+    sources 'RCW142''
+    snver 6
+    gainver 6
+    gainuse 7
+    go
+    ```
