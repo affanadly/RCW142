@@ -7,8 +7,8 @@
 * 5 epochs downloaded, all can be loaded to AIPS with no issues.
 * Currently calibrating 1st epoch
   * AIPS (amplitude, phase, and residual) calibration done
-  * Currently performing self-calibration in DIFMAP
-  * Sigma values seem to be too high ($\sim50$)
+  * DIFMAP self-calibration done
+  * Currently loading the self-calibration solution in AIPS
 
 ## Data Reduction Procedure
 
