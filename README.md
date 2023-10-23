@@ -7,8 +7,8 @@
 * 5 epochs downloaded, all can be loaded to AIPS with no issues.
 * Currently calibrating 1st epoch
   * AIPS (amplitude, phase, and residual) calibration done
-  * DIFMAP self-calibration done
-  * Currently loading the self-calibration solution in AIPS
+  * DIFMAP self-calibration and loaded into AIPS
+  * Currently performing imaging (wide to extremely small scales by utilizing rashift and decshift in AIPS IMAGR task)
 
 ## Data Reduction Procedure
 
