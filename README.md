@@ -2,7 +2,6 @@
 
 [Google Drive Link](https://drive.google.com/drive/folders/1hop1pUahxyfgviR_ZTisNih8-QJHtNvz?usp=drive_link)
 
-<<<<<<< Updated upstream
 ## Progress Summary
 
 * 5 epochs downloaded, all can be loaded to AIPS with no issues.
@@ -15,8 +14,6 @@
 
 [AIPS reduction procedure](reduction_procedure.md)
 
-=======
->>>>>>> Stashed changes
 ## Epochs
 
 | Experiment Code | Bucket | Start Date | End Date | Start Time | End Time | Velocity (km/s) |
