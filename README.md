@@ -1,19 +1,5 @@
 # RCW 142 KaVA Data Reduction
 
-[Google Drive Link](https://drive.google.com/drive/folders/1hop1pUahxyfgviR_ZTisNih8-QJHtNvz?usp=drive_link)
-
-## Progress Summary
-
-* 5 epochs downloaded, all can be loaded to AIPS with no issues.
-* Currently calibrating 1st epoch
-  * AIPS (amplitude, phase, and residual) calibration done
-  * DIFMAP self-calibration and loaded into AIPS
-  * Currently performing imaging (wide to extremely small scales by utilizing rashift and decshift in AIPS IMAGR task)
-
-## Data Reduction Procedure
-
-[AIPS reduction procedure](reduction_procedure.md)
-
 ## Epochs
 
 | Experiment Code | Bucket | Start Date | End Date | Start Time | End Time | Velocity (km/s) |
