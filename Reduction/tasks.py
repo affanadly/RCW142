@@ -27,7 +27,7 @@ def tacop(source, target, inext, invers, ncount, params=None):
     parse_params(task, params)
     task.go()
 
-def splat(uvdata, mode='all', sources=None, params=None):
+def splat(uvdata, mode='both', sources=None, params=None):
     initial = grab_catalogue(uvdata.disk)
     
     # split data into sources
@@ -45,7 +45,7 @@ def splat(uvdata, mode='all', sources=None, params=None):
     
     final = grab_catalogue(uvdata.disk)
     output = compare_catalogues(initial, final)
-    return AIPSUVData(output.name, output.klass, output.disk, output.seq)
+    return AIPSUVData(output.name, output.klass, uvdata.disk, output.seq)
 
 def fittp(uvdata, output_name):
     # export data to FITS file

@@ -65,26 +65,24 @@ def amp_bpass(uvdata, calsour, params=None):
 if __name__ == '__main__':
     ps = ArgumentParser(description='Performs amplitude calibration (ACCOR, ANTAB, and BPASS).')
     ps.add_argument('userno', type=int, help='AIPS user number', metavar='USER_NO')
-    ps.add_argument('-m', '--master', type=str, nargs=4, help='Master catalogue information', metavar=('NAME', 'CLASS', 'SEQ', 'DISK'), required=True)
-    ps.add_argument('-a', '--auxiliary', type=str, nargs=4, help='Auxiliary catalogue information', metavar=('NAME', 'CLASS', 'SEQ', 'DISK'), required=True)
-    ps.add_argument('-f', '--flagver', type=int, help='Flag table version to apply', required=True)
+    ps.add_argument('-c', '--catalogue', type=str, nargs=4, help='Visibility catalogue information', metavar=('NAME', 'CLASS', 'SEQ', 'DISK'), required=True)
+    ps.add_argument('-f', '--flagver', type=int, help='Flag table version to apply', default=-1)
     ps.add_argument('--accor_solint', type=float, help='ACCOR solution interval in minutes', required=True)
     ps.add_argument('--antab_file', type=str, help='ANTAB file to apply', required=True)
     ps.add_argument('--apcal_solint', type=float, help='APCAL solution interval in minutes', default=0)
     ps.add_argument('--bpass_sources', type=str, nargs='+', help='Sources to use for BPASS', metavar=('SOURCE_1', 'SOURCE_2'), required=True)
     args = ps.parse_args()
-    args.master[2] = int(args.master[2])
-    args.master[3] = int(args.master[3])
-    args.auxiliary[2] = int(args.auxiliary[2])
-    args.auxiliary[3] = int(args.auxiliary[3])
+    args.catalogue[2] = int(args.catalogue[2])
+    args.catalogue[3] = int(args.catalogue[3])
     
+    # load catalogue
     AIPS.userno = args.userno
+    uvdata = AIPSUVData(args.catalogue[0], args.catalogue[1], args.catalogue[3], args.catalogue[2])
     
-    # amplitude calibration for master catalogue
-    master = AIPSUVData(args.master[0], args.master[1], args.master[3], args.master[2])
-    accor(master, args.accor_solint, params={'flagver': args.flagver})
-    snedt(master, inext='SN', invers=1, solint=args.accor_solint, params={'flagver': args.flagver})
-    clcal(master, params={
+    # calibrate sampler thresholds
+    accor(uvdata, args.accor_solint, params={'flagver': args.flagver})
+    snedt(uvdata, inext='SN', invers=1, solint=args.accor_solint, params={'flagver': args.flagver})
+    clcal(uvdata, params={
         'opcode': 'CALI',
         'interpol': 'SELF',
         'smotype': 'AMPL',
@@ -94,9 +92,11 @@ if __name__ == '__main__':
         'gainuse': 2,
         'refant': -1
     })
-    antab(master, args.antab_file)
-    apcal(master)
-    clcal(master, params={
+    
+    # calibrate antenna gain and system temperature
+    antab(uvdata, args.antab_file)
+    apcal(uvdata)
+    clcal(uvdata, params={
         'opcode': 'CALI',
         'interpol': '2PT', 
         'smotype': 'AMPL',
@@ -106,41 +106,9 @@ if __name__ == '__main__':
         'gainuse': 3,
         'refant': -1
     })
-    amp_bpass(master, args.bpass_sources, params={
-        'docalib': 1,
-        'gainuse': 3,
-        'flagver': args.flagver,
-        'solint': 0,
-        'soltype': 'L1R',
-    })
-
-    # amplitude calibration for auxiliary catalogue
-    auxiliary = AIPSUVData(args.auxiliary[0], args.auxiliary[1], args.auxiliary[3], args.auxiliary[2])
-    accor(auxiliary, args.accor_solint, params={'flagver': args.flagver})
-    snedt(auxiliary, inext='SN', invers=1, solint=args.accor_solint, params={'flagver': args.flagver})
-    clcal(auxiliary, params={
-        'opcode': 'CALI',
-        'interpol': 'SELF',
-        'smotype': 'AMPL',
-        'snver': 2, 
-        'invers': 2,
-        'gainver': 1,
-        'gainuse': 2,
-        'refant': -1
-    })
-    antab(auxiliary, args.antab_file)
-    apcal(auxiliary, args.apcal_solint)
-    clcal(auxiliary, params={
-        'opcode': 'CALI',
-        'interpol': '2PT', 
-        'smotype': 'AMPL',
-        'snver': 3,
-        'invers': 3,
-        'gainver': 2,
-        'gainuse': 3,
-        'refant': -1
-    })
-    amp_bpass(auxiliary, args.bpass_sources, params={
+    
+    # calibrate amplitude bandpass
+    amp_bpass(uvdata, args.bpass_sources, params={
         'docalib': 1,
         'gainuse': 3,
         'flagver': args.flagver,
