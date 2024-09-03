@@ -77,5 +77,5 @@ if __name__ == '__main__':
             break
         init = int(new_chan)
         uvdata_cvel.zap()
-    tabed_key(uvdata, inext='AN', invers=1, key='ARRNAM', value='KAVA')
-    tabed_key(uvdata_cvel, inext='AN', invers=1, key='ARRNAM', value='KAVA')
+    tabed_key(uvdata, inext='AN', invers=1, key='ARRNAM', value='KVN')
+    tabed_key(uvdata_cvel, inext='AN', invers=1, key='ARRNAM', value='KVN')

@@ -158,3 +158,7 @@ ParselTongue maser_cal.py <user no> -c MULTI CVEL 1 1 -f 1 -t RCW142 -pc <peak c
 ```
 ParselTongue finalize.py <user no> -c MULTI CVEL 1 1 -t RCW142 -f 1 -g 5 -b 1
 ```
+
+# Pipeline
+
+The `KaVA_pipeline.py` script combines all the above steps into a single script.
