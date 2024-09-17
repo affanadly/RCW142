@@ -1,6 +1,4 @@
 from AIPSData import AIPSCat
-from astropy.table import Table
-from astropy import units as u
 
 def grab_catalogue(disk):
     # grab catalogue from disk

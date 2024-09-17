@@ -3,13 +3,9 @@ import yaml
 from argparse import ArgumentParser
 
 from AIPS import AIPS
-from AIPSTask import AIPSTask, AIPSList
-from AIPSData import AIPSUVData, AIPSCat
-from AIPSTV import AIPSTV
+from AIPSTask import AIPSList
 
-from utils import *
-from tasks import *
-# from vis_utils import *
+from tasks import fitld, msort, indxr, uvflg, clcal, accor, snedt, antab, apcal, bpass, fring, tabed_key, cvel_doppler, set_velocity, split
 
 # To-Do List:
 # - show visibilities after loading, allow user to create flag file OR automatically flag visibilities
@@ -17,151 +13,6 @@ from tasks import *
 # - automatically determine peak maser channel
 # - handle multiple target sources
 # - handle self-calibration option
-
-# -------------------- #
-
-def fitld(filename, disk, clint, sources, params=None):
-    # load fits file as catalogue
-    initial = grab_catalogue(disk)
-    
-    task = AIPSTask('FITLD')
-    task.datain = os.path.realpath(filename)
-    task.outdisk = disk
-    task.clint = clint
-    task.sources = AIPSList(sources)
-    parse_params(task, params)
-    task.go()
-    
-    final = grab_catalogue(disk)
-    output = compare_catalogues(initial, final)
-    return AIPSUVData(output.name, output.klass, disk, output.seq)
-
-def msort(uvdata, params=None):
-    # sort visibilities
-    initial = grab_catalogue(uvdata.disk)
-    
-    task = AIPSTask('MSORT')
-    task.indata = uvdata
-    task.outdisk = uvdata.disk
-    parse_params(task, params)
-    task.go()
-    
-    final = grab_catalogue(uvdata.disk)
-    output = compare_catalogues(initial, final)
-    return AIPSUVData(output.name, output.klass, uvdata.disk, output.seq)
-
-def indxr(uvdata, solint, params=None):
-    # index visibilities and create empty calibration table
-    task = AIPSTask('INDXR')
-    task.indata = uvdata
-    task.cparm[3] = solint
-    parse_params(task, params)
-    task.go()
-
-def uvflg(uvdata, outfgver, params=None):
-    # flags visibilities based on params
-    task = AIPSTask('UVFLG')
-    task.indata = uvdata
-    task.outfgver = outfgver
-    parse_params(task, params)
-    task.go()
-
-def accor(uvdata, params=None):
-    # correct sampler errors
-    task = AIPSTask('ACCOR')
-    task.indata = uvdata
-    parse_params(task, params)
-    task.go()
-
-def snedt(uvdata, inext='SN', invers=0, params=None):
-    # edit solution table
-    tv = AIPSTV()
-    tv.start()
-    
-    task = AIPSTask('SNEDT')
-    task.indata = uvdata
-    task.inext = inext
-    task.invers = invers
-    parse_params(task, params)
-    task.go()
-    
-    tv.kill()
-
-def antab(uvdata, antab_file, params=None):
-    # load antenna temperature data
-    task = AIPSTask('ANTAB')
-    task.indata = uvdata
-    task.calin = os.path.realpath(antab_file)
-    parse_params(task, params)
-    task.go()
-
-def apcal(uvdata, params=None):
-    # generate amplitude solutions
-    task = AIPSTask('APCAL')
-    task.indata = uvdata
-    parse_params(task, params)
-    task.go()
-
-def bpass(uvdata, calsour, params=None):
-    # generate bandpass table
-    task = AIPSTask('BPASS')
-    task.indata = uvdata
-    task.calsour = AIPSList(calsour)
-    task.bpassprm[1] = 1
-    task.bpassprm[10] = 1
-    parse_params(task, params)
-    task.go()
-
-def fring(uvdata, calsour, params=None): 
-    # fringe fitting
-    task = AIPSTask('FRING')
-    task.indata = uvdata
-    task.calsour = AIPSList(calsour)
-    parse_params(task, params)
-    task.go()
-
-def tabed_key(uvdata, inext, invers, key, value, params=None):
-    # edit table entry
-    task = AIPSTask('TABED')
-    task.indata = uvdata
-    task.inext = inext
-    task.invers = invers
-    task.optype = 'KEY'
-    task.aparm[4] = 3
-    task.keyword = key
-    task.keystrng = value
-    parse_params(task, params)
-    task.go()
-
-def set_velocity(uvdata, restfreq, sources, sysvel, chan, params=None):
-    # set velocity parameters
-    task = AIPSTask('SETJY')
-    task.indata = uvdata
-    task.sources = AIPSList(sources)
-    task.sysvel = sysvel
-    task.restfreq[1], task.restfreq[2] = restfreq
-    task.veltyp = 'LSR'
-    task.veldef = 'RADIO'
-    task.aparm[1] = chan
-    parse_params(task, params)
-    task.go()
-
-def cvel_doppler(uvdata, sources, freqid=1, params=None):
-    # apply Doppler correction
-    initial = grab_catalogue(uvdata.disk)
-    
-    task = AIPSTask('CVEL')
-    task.indata = uvdata
-    task.sources = AIPSList(sources)
-    task.freqid = freqid
-    task.aparm[4] = 1
-    task.aparm[10] = 1
-    parse_params(task, params)
-    task.go()
-    
-    final = grab_catalogue(uvdata.disk)
-    output = compare_catalogues(initial, final)
-    return AIPSUVData(output.name, output.klass, uvdata.disk, output.seq)
 
 # -------------------- #
 
@@ -174,8 +25,8 @@ if __name__ == '__main__':
     io.add_argument('-f', '--file', type=str, help='Visibility file name to load', metavar='FILE', required=True)
     io.add_argument('-t', '--target', type=str, help='Target maser source name', metavar='SOURCE', required=True)
     io.add_argument('-c', '--calibrator', type=str, nargs='+', help='Continuum calibrator source name(s)', metavar=('CALIBRATOR_1', 'CALIBRATOR_2'), required=True)
-    io.add_argument('-d', '--disk', type=int, help='AIPS disk number to load into', default=1)
-    io.add_argument('-i', '--clint', type=float, help='Integration time in minutes', default=0.0273)
+    io.add_argument('-d', '--disk', type=int, help='AIPS disk number to load into', metavar='DISK', default=1)
+    io.add_argument('-i', '--clint', type=float, help='Integration time in minutes', metavar='CLINT', default=0.0273)
 
     cali = ps.add_argument_group('calibration', description='Calibration parameters')
     cali.add_argument('--flag_file', type=str, help='Flag table file name', metavar='FLAG_FILE', default=None)
@@ -183,7 +34,7 @@ if __name__ == '__main__':
     cali.add_argument('--refant', type=int, help='Reference antenna for phase, delay, and rate calibrations', metavar='REFANT', required=True)
     cali.add_argument('--continuum_solint', type=float, help='Continuum delay solution interval in minutes', metavar='SOLINT', default=10)
     cali.add_argument('--continuum_solwin', type=float, nargs=2, help='Continuum delay and rate solution windows in ns and mHz', metavar=('DELAY', 'RATE'), default=[120, 120])
-    cali.add_argument('--restfreq', type=float, nargs=2, help='Rest frequency of spectral line (FREQ_1 + FREQ_2)', metavar=('FREQ_1', 'FREQ_2'), required=True)
+    cali.add_argument('--restfreq', type=float, nargs=2, help='Rest frequency of spectral line (FREQ_1 + FREQ_2)', metavar=('FREQ_1', 'FREQ_2'), default=(22.23E9, 5080000))
     cali.add_argument('--sysvel', type=float, help='Systemic velocity of source in km/s', metavar='VELOCITY', required=True)
     cali.add_argument('--lsr_chan', type=int, help='Channel number for LSR velocity', metavar='CHANNEL', required=True)
     cali.add_argument('--peak_chan', type=int, help='Peak channel in maser spectrum', metavar='CHANNEL', required=True)
@@ -286,8 +137,11 @@ if __name__ == '__main__':
     
     # calibrate doppler
     tabed_key(uvdata, inext='AN', invers=1, key='ARRNAM', value='VLBA')
-    set_velocity(uvdata, args.restfreq, [args.target], args.sysvel, args.lsr_chan)
-    uvdata_cvel = cvel_doppler(uvdata, [args.target])
+    set_velocity(uvdata, args.restfreq, args.target, args.sysvel, args.lsr_chan)
+    uvdata_cvel = cvel_doppler(uvdata, [args.target], params={
+        'docalib': 1,
+        'gainuse': 5,
+    })
     tabed_key(uvdata, inext='AN', invers=1, key='ARRNAM', value='KVN')
     tabed_key(uvdata_cvel, inext='AN', invers=1, key='ARRNAM', value='KVN')
     uvdata = uvdata_cvel
