@@ -38,13 +38,13 @@ if __name__ == '__main__':
         'nchav': args.nchav,
         'chinc': args.nchav,
     })
-    switch_spectral(images[1].name, images[1].klass, images[1].seq, uvdata.disk)
+    switch_spectral(images[1])
     
     # grab clean components
-    wcs = grab_im_wcs(images[1].name, images[1].klass, images[1].seq, uvdata.disk)
+    wcs = grab_im_wcs(images[1])
     ccs = []
     for chan in range(int((args.channel[1] - args.channel[0] + 1)/args.nchav)):
-        cc = grab_im_table(images[1].name, images[1].klass, images[1].seq, uvdata.disk, 'CC', table_index=chan + 1, ignore=['_status'])
+        cc = grab_im_table(images[1], 'CC', table_index=chan + 1, ignore=['_status'])
         cc['flux'].unit = u.Jy
         cc['deltax'] *= 3600
         cc['deltay'] *= 3600
