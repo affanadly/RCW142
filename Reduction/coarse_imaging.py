@@ -3,10 +3,11 @@ from argparse import ArgumentParser
 from AIPS import AIPS
 from AIPSData import AIPSUVData
 
+import numpy as np
 from astropy.table import vstack
 from astropy import units as u
 
-from tasks import imagr
+from tasks import imagr, ccmrg
 from wiz import switch_spectral, grab_im_table, grab_im_wcs
 
 # -------------------- #
@@ -38,9 +39,11 @@ if __name__ == '__main__':
         'nchav': args.nchav,
         'chinc': args.nchav,
     })
+    for chan in range(int((args.channel[1] - args.channel[0] + 1)/args.nchav)):
+        ccmrg(images[1], invers=chan + 1, outvers=chan + 1)
     switch_spectral(images[1])
     
-    # grab clean components
+    # grab clean components (before the first negative flux)
     wcs = grab_im_wcs(images[1])
     ccs = []
     for chan in range(int((args.channel[1] - args.channel[0] + 1)/args.nchav)):
@@ -54,6 +57,7 @@ if __name__ == '__main__':
         cc['chanup'] = args.channel[0] + args.nchav*chan + args.nchav - 1
         cc['velocity'] = wcs.spectral.pixel_to_world(chan)
         cc['velocity'] = cc['velocity'].to(u.km/u.s)
+        cc = cc[:np.where(cc['flux'] < 0)[0][0]]
         ccs.append(cc)
     ccs = vstack(ccs)
     ccs.write(args.output, format='fits', overwrite=True)

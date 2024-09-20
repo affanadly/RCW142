@@ -193,8 +193,8 @@ def imagr(uvdata, cellsize, imsize, niter=0, params=None):
         task.imsize = AIPSList([imsize, imsize])
     else:
         task.imsize = AIPSList([*imsize])
-    task.niter = niter
     task.do3dimag = 1
+    task.niter = niter
     task.dotv = -1
     parse_params(task, params)
     task.go()
@@ -202,3 +202,11 @@ def imagr(uvdata, cellsize, imsize, niter=0, params=None):
     final = grab_catalogue(uvdata.disk)
     output = compare_catalogues(initial, final, return_multiple=True)
     return [AIPSImage(item.name, item.klass, uvdata.disk, item.seq) for item in output]
+
+def ccmrg(image, invers=0, outvers=0):
+    # merge clean components
+    task = AIPSTask('CCMRG')
+    task.indata = image
+    task.invers = invers
+    task.outvers = outvers
+    task.go()
