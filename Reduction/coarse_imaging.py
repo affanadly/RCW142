@@ -53,8 +53,8 @@ if __name__ == '__main__':
         cc['deltay'] *= 3600
         cc['deltax'].unit = u.arcsec
         cc['deltay'].unit = u.arcsec
-        cc['chanlo'] = args.channel[0] + args.nchav*chan
-        cc['chanup'] = args.channel[0] + args.nchav*chan + args.nchav - 1
+        cc['bchan'] = args.channel[0] + args.nchav*chan
+        cc['echan'] = args.channel[0] + args.nchav*chan + args.nchav - 1
         cc['velocity'] = wcs.spectral.pixel_to_world(chan)
         cc['velocity'] = cc['velocity'].to(u.km/u.s)
         cc = cc[:np.where(cc['flux'] < 0)[0][0]]

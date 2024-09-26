@@ -219,11 +219,26 @@ def grab_im_table(im, table_name, table_index=0, ignore=[]):
     )
     return table
 
+def grab_im_alt(im):
+    '''
+    Grab image from AIPSImage object
+    '''
+    temp_im = AIPSImage(im.name, im.klass, im.disk, im.seq)
+    temp_im.squeeze()
+    x, y, z = tuple(temp_im.header['naxis'][:3])
+    image = []
+    for i in range(z):
+        temp_im._data.ReadPlane(temp_im._err, blc=[1, 1, i+1], trc=[x, y, i+1])
+        image.append(np.frombuffer(temp_im._data.PixBuf))
+    return np.array(image)
+
 def grab_im(im):
     '''
     Grab image from AIPSImage object
-    '''   
-    return AIPSImage(im.name, im.klass, im.disk, im.seq).pixels
+    '''
+    temp_im = AIPSImage(im.name, im.klass, im.disk, im.seq)
+    temp_im.squeeze()
+    return temp_im.pixels
 
 def grab_im_header(im):
     '''

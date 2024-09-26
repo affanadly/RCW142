@@ -123,8 +123,7 @@ if __name__ == '__main__':
         'dparm|3': args.continuum_solwin[1],
         'dparm|8': 1
     })
-    clcal(uvdata, params={
-        'calsour': AIPSList(args.calibrator),
+    clcal(uvdata, calsour=args.calibrator, params={
         'opcode': 'CALI',
         'interpol': 'AMBG',
         'smotype': 'VLBI',
@@ -138,10 +137,7 @@ if __name__ == '__main__':
     # calibrate doppler
     tabed_key(uvdata, inext='AN', invers=1, key='ARRNAM', value='VLBA')
     set_velocity(uvdata, args.restfreq, args.target, args.sysvel, args.lsr_chan)
-    uvdata_cvel = cvel_doppler(uvdata, [args.target], params={
-        'docalib': 1,
-        'gainuse': 5,
-    })
+    uvdata_cvel = cvel_doppler(uvdata, [args.target])
     tabed_key(uvdata, inext='AN', invers=1, key='ARRNAM', value='KVN')
     tabed_key(uvdata_cvel, inext='AN', invers=1, key='ARRNAM', value='KVN')
     uvdata = uvdata_cvel
@@ -165,9 +161,7 @@ if __name__ == '__main__':
         'dparm|2': -1,
         'dparm|3': args.maser_solwin
     })
-    clcal(uvdata, params={
-        'calsour': AIPSList([args.target]),
-        'sources': AIPSList([args.target]),
+    clcal(uvdata, sources=[args.target], calsour=[args.target], params={
         'opcode': 'CALI',
         'interpol': 'AMBG',
         'smotype': 'VLBI',
