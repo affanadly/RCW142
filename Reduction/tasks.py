@@ -179,6 +179,34 @@ def split(uvdata, source, mode='both', params=None):
     output = compare_catalogues(initial, final)
     return AIPSUVData(output.name, output.klass, uvdata.disk, output.seq)
 
+def fittp(uvdata, filename):
+    # write catalogue to fits file
+    task = AIPSTask('FITTP')
+    task.indata = uvdata
+    task.doall = 1
+    task.dataout = os.path.realpath(filename)
+    task.go()
+
+def calib(uvdata_1, uvdata_2, calsour, params=None):
+    # perform calibration based on source model
+    task = AIPSTask('CALIB')
+    task.indata = uvdata_1
+    task.in2data = uvdata_2
+    task.calsour = AIPSList(calsour)
+    parse_params(task, params)
+    task.go()
+
+def tacop(uvdata_in, uvdata_out, inext, invers=0, ncount=1, params=None):
+    # copy table
+    task = AIPSTask('TACOP')
+    task.indata = uvdata_in
+    task.outdata = uvdata_out
+    task.inext = inext
+    task.invers = invers
+    task.ncount = ncount
+    parse_params(task, params)
+    task.go()
+
 def imagr(uvdata, cellsize, imsize, niter=0, params=None):
     # perform imaging
     initial = grab_catalogue(uvdata.disk)
