@@ -7,13 +7,6 @@ from AIPSTask import AIPSList
 
 from tasks import fitld, msort, indxr, uvflg, clcal, accor, snedt, antab, apcal, bpass, fring, tabed_key, cvel_doppler, set_velocity, split
 
-# To-Do List:
-# - show visibilities after loading, allow user to create flag file OR automatically flag visibilities
-# - automatically determine LSR channel
-# - automatically determine peak maser channel
-# - handle multiple target sources
-# - handle self-calibration option
-
 # -------------------- #
 
 if __name__ == '__main__':
@@ -27,6 +20,7 @@ if __name__ == '__main__':
     io.add_argument('-c', '--calibrator', type=str, nargs='+', help='Continuum calibrator source name(s)', metavar=('CALIBRATOR_1', 'CALIBRATOR_2'), required=True)
     io.add_argument('-d', '--disk', type=int, help='AIPS disk number to load into', metavar='DISK', default=1)
     io.add_argument('-i', '--clint', type=float, help='Integration time in minutes', metavar='CLINT', default=0.0273)
+    io.add_argument('--log', type=str, help='Log file name', metavar='LOG', default=None)
 
     cali = ps.add_argument_group('calibration', description='Calibration parameters')
     cali.add_argument('--flag_file', type=str, help='Flag table file name', metavar='FLAG_FILE', default=None)
@@ -46,6 +40,8 @@ if __name__ == '__main__':
     
     # prepare AIPS
     AIPS.userno = args.userno
+    if args.log is not None:
+        AIPS.log = open(args.log, 'w')
     
     # load, sort, and index visibility data
     uvdata = fitld(args.file, args.disk, args.clint, [args.target, *args.calibrator], params={
@@ -180,3 +176,6 @@ if __name__ == '__main__':
         'doband': 2,
         'bpver': 1
     })
+
+    if args.log is not None:
+        AIPS.log.close()

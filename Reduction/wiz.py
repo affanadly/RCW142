@@ -228,7 +228,7 @@ def grab_im_alt(im):
     x, y, z = tuple(temp_im.header['naxis'][:3])
     image = []
     for i in range(z):
-        temp_im._data.ReadPlane(temp_im._err, blc=[1, 1, i+1], trc=[x, y, i+1])
+        temp_im._data.ReadPlane(temp_im._err, blc=[-x, -y, i+1], trc=[x, y, i+1])
         image.append(np.frombuffer(temp_im._data.PixBuf))
     return np.array(image)
 

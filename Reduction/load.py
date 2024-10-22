@@ -11,7 +11,7 @@ if __name__ == '__main__':
     ps.add_argument('userno', type=int, help='AIPS user number', metavar='USER_NO')
     ps.add_argument('-f', '--file', type=str, help='Visibility file name to load', metavar='FILE', required=True)
     ps.add_argument('-s', '--sources', type=str, nargs='+', help='Sources to read in file', metavar=('SOURCE_1', 'SOURCE_2'), required=True)
-    ps.add_argument('-d', '--disk', type=int, help='AIPS disk number to load into', required=True)
+    ps.add_argument('-d', '--disk', type=int, help='AIPS disk number to load into', default=1)
     ps.add_argument('-i', '--clint', type=float, help='Integration time in minutes', required=True)
     args = ps.parse_args()
     

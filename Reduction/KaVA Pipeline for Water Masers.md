@@ -1,8 +1,8 @@
-The `KaVA_pipeline.py` performs the entire reduction and calibration procedure. For now, parameters such as the phase center shifts, LSR channel, and peak channels are entered manually.
+The `KaVA_pipeline.py` script performs the entire reduction and calibration procedure. For now, parameters such as the phase center shifts, LSR channel, and peak channels are entered manually.
 # Syntax
 
 ```
-ParselTongue KaVA_pipeline.py USER_NO [-h] -f FILE -t SOURCE -c CALIBRATOR_1 [CALIBRATOR_2 ...] [-d DISK] [-i CLINT] [--flag_file FLAG_FILE] --antab_file ANTAB_FILE --refant REFANT [--continuum_solint SOLINT] [--continuum_solwin DELAY RATE] --restfreq FREQ_1 FREQ_2 --sysvel VELOCITY --lsr_chan CHANNEL --peak_chan CHANNEL [--maser_solint SOLINT] [--maser_solsub SOLSUB] [--maser_solwin RATE]
+ParselTongue KaVA_pipeline.py USER_NO [-h] -f FILE -t SOURCE -c CALIBRATOR_1 [CALIBRATOR_2 ...] [-d DISK] [-i CLINT] [--log LOG] [--flag_file FLAG_FILE] --antab_file ANTAB_FILE --refant REFANT [--continuum_solint SOLINT] [--continuum_solwin DELAY RATE] [--restfreq FREQ_1 FREQ_2] --sysvel VELOCITY --lsr_chan CHANNEL --peak_chan CHANNEL [--maser_solint SOLINT] [--maser_solsub SOLSUB] [--maser_solwin RATE]
 ```
 ## Primary Arguments
 
@@ -19,7 +19,7 @@ ParselTongue KaVA_pipeline.py USER_NO [-h] -f FILE -t SOURCE -c CALIBRATOR_1 [CA
 | -c  | --calibrator | CALIBRATOR_1, [CALIBRATOR_2, …] |         | Continuum calibrator source name(s) |
 | -d  | --disk       | DISK                            | 1       | AIPS disk number to load into       |
 | -i  | --clint      | CLINT                           | 0.0273  | Integration time in minutes         |
-
+|     | --log        | LOG                             |         | Log file name                       |
 ## Calibration Parameters
 
 | Flag               | Arguments      | Default          | Description                                               |
@@ -36,7 +36,6 @@ ParselTongue KaVA_pipeline.py USER_NO [-h] -f FILE -t SOURCE -c CALIBRATOR_1 [CA
 | --maser_solint     | SOLINT         | 1                | Maser rate solution interval in minutes                   |
 | --maser_solsub     | SOLSUB         | 10               | Maser rate solution subinterval in minutes                |
 | --maser_solwin     | RATE           | 800              | Maser rate solution window in mHz                         |
-
 # Flowchart
 ```mermaid
 flowchart TB
